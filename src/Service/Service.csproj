@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <AssemblyName>PipServices.Templates.Facade.Service</AssemblyName>
+        <RootNamespace>PipServices.Templates.Facade</RootNamespace>
+        <Version>1.0.0</Version>
+        <Authors>Sergey Seroukhov, Denis Kuznetsov</Authors>
+        <Copyright>Conceptual Vision Consulting LLC. 2017-2020</Copyright>
+        <Description>PipServices.Templates facade</Description>
+      <Company>Conceptual Vision Consulting LLC.</Company>
+      <Product>PipServices.Templates.Facade</Product>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Remove="Data.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="PipServices3.Commons" Version="3.1.2" />
+      <PackageReference Include="PipServices3.Container" Version="3.1.1" />
+      <PackageReference Include="PipServices3.Rpc" Version="3.3.5" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\Client\Client.csproj" />
+    </ItemGroup>
+</Project>
