@@ -91,7 +91,7 @@ namespace PipServices.Templates.Facade.Services.Version1
         {
             return async (HttpRequest request, HttpResponse response, ClaimsPrincipal user, RouteData routeData, Func<Task> next) =>
             {
-                var sessionUser = GetContextItem<SessionUserV1>(request, "user");
+                var sessionUser = HttpRequestHelper.GetContextItem<SessionUserV1>(request, "user");
 
                 if (sessionUser == null)
                 {
@@ -153,7 +153,7 @@ namespace PipServices.Templates.Facade.Services.Version1
         {
             return async (HttpRequest request, HttpResponse response, ClaimsPrincipal user, RouteData routeData, Func<Task> next) =>
             {
-                var sessionUser = GetContextItem<SessionUserV1>(request, "user");
+                var sessionUser = HttpRequestHelper.GetContextItem<SessionUserV1>(request, "user");
 
                 if (sessionUser == null)
                 {
@@ -187,17 +187,6 @@ namespace PipServices.Templates.Facade.Services.Version1
 
 				await next();
             };
-        }
-
-        private static T GetContextItem<T>(HttpRequest request, string name)
-            where T : class
-        {
-            if (request != null && request.HttpContext.Items.TryGetValue(name, out object item))
-            {
-                return item as T;
-            }
-
-            return null;
         }
     }
 }

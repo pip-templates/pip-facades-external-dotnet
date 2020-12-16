@@ -47,8 +47,7 @@ namespace PipServices.Templates.Facade.Services.Version2
 			var auth = new AuthorizerV1();
 
 			// Restore session middleware
-			RegisterInterceptor("",
-				async (request, response, user, routeData, next) => { await _sessionsOperations.LoadSessionAsync(request, response, user, routeData, next); });
+			RegisterInterceptor("", _sessionsOperations.LoadSessionAsync);
 
 			// About Route
 			RegisterRouteWithAuth("get", "/about", auth.Anybody(),
@@ -69,138 +68,52 @@ namespace PipServices.Templates.Facade.Services.Version2
 
 		private void RegisterInvitation(AuthorizerV1 auth)
 		{
-			RegisterRouteWithAuth("get", "/sites/{site_id}/invitations", auth.SiteUser(),
-				async (request, response, user, routeData) => { await _invitationsOperations.GetInvitationsAsync(request, response, user, routeData); });
-
-			RegisterRouteWithAuth("get", "/sites/{site_id}/invitations/{invitation_id}", auth.SiteUser(),
-				async (request, response, user, routeData) => { await _invitationsOperations.GetInvitationAsync(request, response, user, routeData); });
-
-			RegisterRouteWithAuth("post", "/sites/{site_id}/invitations", auth.Signed(),
-				async (request, response, user, routeData) => { await _invitationsOperations.SendInvitationAsync(request, response, user, routeData); });
-
-			RegisterRouteWithAuth("post", "/sites/{site_id}/invitations/notify", auth.SiteManager(),
-				async (request, response, user, routeData) => { await _invitationsOperations.NotifyInvitationAsync(request, response, user, routeData); });
-
-			RegisterRouteWithAuth("delete", "/sites/{site_id}/invitations/{invitation_id}", auth.SiteManager(),
-				async (request, response, user, routeData) => { await _invitationsOperations.DeleteInvitationAsync(request, response, user, routeData); });
-
-			RegisterRouteWithAuth("post", "/sites/{site_id}/invitations/{invitation_id}/approve", auth.SiteManager(),
-				async (request, response, user, routeData) => { await _invitationsOperations.ApproveInvitationAsync(request, response, user, routeData); });
-
-			RegisterRouteWithAuth("post", "/sites/{site_id}/invitations/{invitation_id}/deny", auth.SiteManager(),
-				async (request, response, user, routeData) => { await _invitationsOperations.DenyInvitationAsync(request, response, user, routeData); });
-
-			RegisterRouteWithAuth("post", "/sites/{site_id}/invitations/{invitation_id}/resend", auth.SiteManager(),
-				async (request, response, user, routeData) => { await _invitationsOperations.ResendInvitationAsync(request, response, user, routeData); });
+			RegisterRouteWithAuth("get", "/sites/{site_id}/invitations", auth.SiteUser(), _invitationsOperations.GetInvitationsAsync);
+			RegisterRouteWithAuth("get", "/sites/{site_id}/invitations/{invitation_id}", auth.SiteUser(), _invitationsOperations.GetInvitationAsync);
+			RegisterRouteWithAuth("post", "/sites/{site_id}/invitations", auth.Signed(), _invitationsOperations.SendInvitationAsync);
+			RegisterRouteWithAuth("post", "/sites/{site_id}/invitations/notify", auth.SiteManager(), _invitationsOperations.NotifyInvitationAsync);
+			RegisterRouteWithAuth("delete", "/sites/{site_id}/invitations/{invitation_id}", auth.SiteManager(), _invitationsOperations.DeleteInvitationAsync);
+			RegisterRouteWithAuth("post", "/sites/{site_id}/invitations/{invitation_id}/approve", auth.SiteManager(), _invitationsOperations.ApproveInvitationAsync);
+			RegisterRouteWithAuth("post", "/sites/{site_id}/invitations/{invitation_id}/deny", auth.SiteManager(), _invitationsOperations.DenyInvitationAsync);
+			RegisterRouteWithAuth("post", "/sites/{site_id}/invitations/{invitation_id}/resend", auth.SiteManager(), _invitationsOperations.ResendInvitationAsync);
 		}
 
 		private void RegisterSite(AuthorizerV1 auth)
 		{
-			// Site Routes
-			RegisterRouteWithAuth("get", "/sites", auth.Signed(),
-				async (request, response, user, routeData) => { await _sitesOperations.GetAuthorizedSitesAsync(request, response, user, routeData); });
-
-			RegisterRouteWithAuth("get", "/sites/all", auth.Admin(),
-				async (request, response, user, routeData) => { await _sitesOperations.GetSitesAsync(request, response, user, routeData); });
-
-			RegisterRouteWithAuth("get", "/sites/find_by_code", auth.Anybody(),
-				async (request, response, user, routeData) => { await _sitesOperations.FindSiteByCodeAsync(request, response, user, routeData); });
-
-			RegisterRouteWithAuth("get", "/sites/{site_id}", auth.SiteUser(),
-				async (request, response, user, routeData) => { await _sitesOperations.GetSiteAsync(request, response, user, routeData); });
-
-			RegisterRouteWithAuth("post", "/sites/{site_id}/generate_code", auth.SiteAdmin(),
-				async (request, response, user, routeData) => { await _sitesOperations.GenerateCodeAsync(request, response, user, routeData); });
-
-			RegisterRouteWithAuth("post", "/sites", auth.Signed(),
-				async (request, response, user, routeData) => { await _sitesOperations.CreateSiteAsync(request, response, user, routeData); });
-
-			RegisterRouteWithAuth("post", "/sites/validate_code", auth.Signed(),
-				async (request, response, user, routeData) => { await _sitesOperations.ValidateSiteCodeAsync(request, response, user, routeData); });
-
-			RegisterRouteWithAuth("put", "/sites/{site_id}", auth.SiteAdmin(),
-				async (request, response, user, routeData) => { await _sitesOperations.UpdateSiteAsync(request, response, user, routeData); });
-
-			RegisterRouteWithAuth("delete", "/sites/{site_id}", auth.Admin(),
-				async (request, response, user, routeData) => { await _sitesOperations.DeleteSiteAsync(request, response, user, routeData); });
-
-			RegisterRouteWithAuth("post", "/sites/{site_id}/remove", auth.SiteUser(),
-				async (request, response, user, routeData) => { await _sitesOperations.RemoveSiteAsync(request, response, user, routeData); });
+			RegisterRouteWithAuth("get", "/sites", auth.Signed(), _sitesOperations.GetAuthorizedSitesAsync);
+			RegisterRouteWithAuth("get", "/sites/all", auth.Admin(), _sitesOperations.GetSitesAsync);
+			RegisterRouteWithAuth("get", "/sites/find_by_code", auth.Anybody(), _sitesOperations.FindSiteByCodeAsync);
+			RegisterRouteWithAuth("get", "/sites/{site_id}", auth.SiteUser(), _sitesOperations.GetSiteAsync);
+			RegisterRouteWithAuth("post", "/sites/{site_id}/generate_code", auth.SiteAdmin(), _sitesOperations.GenerateCodeAsync);
+			RegisterRouteWithAuth("post", "/sites", auth.Signed(), _sitesOperations.CreateSiteAsync);
+			RegisterRouteWithAuth("post", "/sites/validate_code", auth.Signed(), _sitesOperations.ValidateSiteCodeAsync);
+			RegisterRouteWithAuth("put", "/sites/{site_id}", auth.SiteAdmin(), _sitesOperations.UpdateSiteAsync);
+			RegisterRouteWithAuth("delete", "/sites/{site_id}", auth.Admin(), _sitesOperations.DeleteSiteAsync);
+			RegisterRouteWithAuth("post", "/sites/{site_id}/remove", auth.SiteUser(), _sitesOperations.RemoveSiteAsync);
 		}
 
 		private void RegisterSession(AuthorizerV1 auth)
 		{
-			RegisterRouteWithAuth("post", "/signup", auth.Anybody(),
-				async (request, response, user, routeData) => { await _sessionsOperations.SignupAsync(request, response); });
-
-			RegisterRouteWithAuth("get", "/signup/validate", auth.Anybody(),
-				async (request, response, user, routeData) => { await _sessionsOperations.SignupValidateAsync(request, response); });
-
-			RegisterRouteWithAuth("post", "/signin", auth.Anybody(),
-				async (request, response, user, routeData) => { await _sessionsOperations.SigninAsync(request, response); });
-
-			RegisterRouteWithAuth("post", "/signout", auth.Anybody(),
-				async (request, response, user, routeData) => { await _sessionsOperations.SignoutAsync(request, response); });
-
-			RegisterRouteWithAuth("get", "/sessions", auth.Admin(),
-				async (request, response, user, routeData) => { await _sessionsOperations.GetSessionsAsync(request, response); });
-
-			RegisterRouteWithAuth("post", "/sessions/restore", auth.Signed(),
-				async (request, response, user, routeData) => { await _sessionsOperations.RestoreSessionAsync(request, response); });
-
-			RegisterRouteWithAuth("get", "/sessions/current", auth.Signed(),
-				async (request, response, user, routeData) => { await _sessionsOperations.GetCurrentSessionAsync(request, response); });
-
-			RegisterRouteWithAuth("get", "/sessions/{user_id}", auth.OwnerOrAdmin("user_id"),
-				async (request, response, user, routeData) => { await _sessionsOperations.GetUserSessionsAsync(request, response); });
-
-			RegisterRouteWithAuth("delete", "/sessions/{user_id}/{session_id}", auth.OwnerOrAdmin("user_id"),
-				async (request, response, user, routeData) => { await _sessionsOperations.CloseSessionAsync(request, response); });
+			RegisterRouteWithAuth("post", "/signup", auth.Anybody(), _sessionsOperations.SignupAsync);
+			RegisterRouteWithAuth("get", "/signup/validate", auth.Anybody(), _sessionsOperations.SignupValidateAsync);
+			RegisterRouteWithAuth("post", "/signin", auth.Anybody(), _sessionsOperations.SigninAsync);
+			RegisterRouteWithAuth("post", "/signout", auth.Anybody(), _sessionsOperations.SignoutAsync);
+			RegisterRouteWithAuth("get", "/sessions", auth.Admin(), _sessionsOperations.GetSessionsAsync);
+			RegisterRouteWithAuth("post", "/sessions/restore", auth.Signed(), _sessionsOperations.RestoreSessionAsync);
+			RegisterRouteWithAuth("get", "/sessions/current", auth.Signed(), _sessionsOperations.GetCurrentSessionAsync);
+			RegisterRouteWithAuth("get", "/sessions/{user_id}", auth.OwnerOrAdmin("user_id"), _sessionsOperations.GetUserSessionsAsync);
+			RegisterRouteWithAuth("delete", "/sessions/{user_id}/{session_id}", auth.OwnerOrAdmin("user_id"), _sessionsOperations.CloseSessionAsync);
 		}
 
 		private void RegisterBeacons(AuthorizerV1 auth)
 		{
-			RegisterRouteWithAuth("get", "/sites/{site_id}/xbeacons", auth.SiteUser(),
-				async (request, response, user, routeData) =>
-				{
-					await _beaconsOperations.GetBeaconsXAsync(request, response, user, routeData);
-				});
-
-			RegisterRouteWithAuth("get", "/sites/{site_id}/xbeacons/{beacon_id}", auth.SiteUser(),
-				async (request, response, user, routeData) =>
-				{
-					await _beaconsOperations.GetBeaconXAsync(request, response, user, routeData);
-				});
-
-			RegisterRouteWithAuth("post", "/sites/{site_id}/xbeacons/calculate_position", auth.SiteManager(),
-				async (request, response, user, routeData) =>
-				{
-					await _beaconsOperations.CalculatePositionXAsync(request, response, user, routeData);
-				});
-
-			RegisterRouteWithAuth("post", "/sites/{site_id}/xbeacons", auth.SiteManager(),
-				async (request, response, user, routeData) =>
-				{
-					await _beaconsOperations.CreateBeaconXAsync(request, response, user, routeData);
-				});
-
-			RegisterRouteWithAuth("post", "/sites/{site_id}/xbeacons/validate_udi", auth.Signed(),
-				async (request, response, user, routeData) =>
-				{
-					await _beaconsOperations.ValidateBeaconUdiXAsync(request, response, user, routeData);
-				});
-
-			RegisterRouteWithAuth("put", "/sites/{site_id}/xbeacons/{beacon_id}", auth.SiteManager(),
-				async (request, response, user, routeData) =>
-				{
-					await _beaconsOperations.UpdateBeaconXAsync(request, response, user, routeData);
-				});
-
-			RegisterRouteWithAuth("delete", "/sites/{site_id}/xbeacons/{beacon_id}", auth.SiteManager(),
-				async (request, response, user, routeData) =>
-				{
-					await _beaconsOperations.DeleteBeaconXAsync(request, response, user, routeData);
-				});
+			RegisterRouteWithAuth("get", "/sites/{site_id}/xbeacons", auth.SiteUser(), _beaconsOperations.GetBeaconsXAsync);
+			RegisterRouteWithAuth("get", "/sites/{site_id}/xbeacons/{beacon_id}", auth.SiteUser(), _beaconsOperations.GetBeaconXAsync);
+			RegisterRouteWithAuth("post", "/sites/{site_id}/xbeacons/calculate_position", auth.SiteManager(), _beaconsOperations.CalculatePositionXAsync);
+			RegisterRouteWithAuth("post", "/sites/{site_id}/xbeacons", auth.SiteManager(), _beaconsOperations.CreateBeaconXAsync);
+			RegisterRouteWithAuth("post", "/sites/{site_id}/xbeacons/validate_udi", auth.Signed(), _beaconsOperations.ValidateBeaconUdiXAsync);
+			RegisterRouteWithAuth("put", "/sites/{site_id}/xbeacons/{beacon_id}", auth.SiteManager(), _beaconsOperations.UpdateBeaconXAsync);
+			RegisterRouteWithAuth("delete", "/sites/{site_id}/xbeacons/{beacon_id}", auth.SiteManager(), _beaconsOperations.DeleteBeaconXAsync);
 		}
     }
 }

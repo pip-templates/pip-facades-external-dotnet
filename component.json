@@ -1,7 +1,7 @@
 {
     "name": "pip-facades-sample-dotnet",
     "registry": "pipregistry.azurecr.io/pip-services",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "build": 0
   }
   

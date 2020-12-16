@@ -231,17 +231,5 @@ namespace PipServices.Templates.Facade.Operations.Version1
 			var site = await _sitesClient.GetSiteByCodeAsync(null, code);
 			await SendResultAsync(response, site?.Id ?? "");
 		}
-
-		private static T GetContextItem<T>(HttpRequest request, string name)
-			where T : class
-		{
-			if (request != null && request.HttpContext.Items.TryGetValue(name, out object item))
-			{
-				return item as T;
-			}
-
-			return null;
-		}
-
 	}
 }

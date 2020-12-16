@@ -36,7 +36,7 @@
 - descriptor: "pip-services-beacons:client:memory:default:*"
 
 # Invitations components
-- descriptor: "pip-services-invitations:client:null:default:*"
+- descriptor: "pip-services-invitations:client:memory:default:*"
 
 # Main facade service
 - descriptor: "pip-services:endpoint:http:default:*"

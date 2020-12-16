@@ -116,16 +116,5 @@ namespace PipServices.Templates.Facade.Operations.Version1
 			await _invitationsClient.NotifyInvitationAsync(null, invitation);
 			await SendEmptyResultAsync(response);
 		}
-
-		private static T GetContextItem<T>(HttpRequest request, string name)
-			where T : class
-		{
-			if (request != null && request.HttpContext.Items.TryGetValue(name, out object item))
-			{
-				return item as T;
-			}
-
-			return null;
-		}
 	}
 }
